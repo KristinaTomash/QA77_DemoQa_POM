@@ -1,0 +1,54 @@
+package com.demoqa.core;
+
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
+
+public abstract class BasePage {
+
+   protected WebDriver driver;
+   public static JavascriptExecutor js;
+   protected WebDriverWait wait;
+
+
+    public BasePage(WebDriver driver) {
+        this.driver = driver;
+        PageFactory.initElements(driver,this);
+        js =(JavascriptExecutor) driver;
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    }
+
+    public void scrollWithJS(int x,int y){
+        js.executeScript("window.scrollBy(" + x + "," + y + ")");
+
+    }
+    public void clickWithJS(WebElement element) {
+        wait.until(ExpectedConditions.visibilityOf(element));
+        ((JavascriptExecutor) driver)
+                .executeScript(
+                        "arguments[0].scrollIntoView({block:'center', inline:'nearest'});", element);
+        ((JavascriptExecutor) driver)
+                .executeScript("arguments[0].click();", element);
+    }
+    public void clickWithJS(WebElement element, int x, int y) {
+        scrollWithJS(x, y);
+        js.executeScript("arguments[0].click();", element);
+    }
+
+    public void click(WebElement element){
+        element.click();
+    }
+    public void type(WebElement element,String text){
+        if (text!=null){
+            click(element);
+            element.clear();
+            element.sendKeys(text);
+        }
+
+    }
+}
