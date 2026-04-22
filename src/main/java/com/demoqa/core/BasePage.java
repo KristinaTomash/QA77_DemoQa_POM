@@ -1,5 +1,6 @@
 package com.demoqa.core;
 
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -51,4 +52,27 @@ public abstract class BasePage {
         }
 
     }
+    public boolean isAlertPresent(int time){
+        Alert alert = getWait(time)
+                .until(ExpectedConditions.alertIsPresent());
+        if (alert==null){
+            return false;
+        }else {
+            driver.switchTo().alert().accept();
+        }return  true;
+    }
+
+    public WebDriverWait getWait(int time) {
+        return new WebDriverWait(driver, Duration.ofSeconds(time));
+    }
+
+    public boolean isContainsText(String text,WebElement element) {
+        return element.getText().contains(text);
+    }
+
+    public boolean shouldHaveText(WebElement element,String text,int time){
+        return getWait(time).until(ExpectedConditions.textToBePresentInElement(element,text));
+
+    }
 }
+

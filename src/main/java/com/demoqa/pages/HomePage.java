@@ -18,4 +18,10 @@ public class HomePage extends BasePage {
         clickWithJS(bookStore);
         return new SidePanel(driver);
     }
+    @FindBy(css = "a[href='/alertsWindows']")
+    WebElement alertsWindows;
+    public SidePanel getAlertsFrameWindows() {
+        clickWithJS(alertsWindows);
+        return new SidePanel(driver);
+    }
 }
