@@ -36,6 +36,11 @@ public abstract class BasePage {
         ((JavascriptExecutor) driver)
                 .executeScript("arguments[0].click();", element);
     }
+
+    public void typeWithJS(WebElement element, String text, int x, int y) {
+        scrollWithJS(x,y);
+        type(element, text);
+    }
     public void clickWithJS(WebElement element, int x, int y) {
         scrollWithJS(x, y);
         js.executeScript("arguments[0].click();", element);

@@ -24,4 +24,12 @@ public class HomePage extends BasePage {
         clickWithJS(alertsWindows);
         return new SidePanel(driver);
     }
+
+    @FindBy(css = "a[href='/forms']")
+    WebElement forms;
+
+    public SidePanel getForms() {
+        clickWithJS(forms);
+        return new SidePanel(driver);
+    }
 }
