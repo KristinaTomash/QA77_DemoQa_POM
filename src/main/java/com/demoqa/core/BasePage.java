@@ -1,5 +1,6 @@
 package com.demoqa.core;
 
+import org.assertj.core.api.SoftAssertions;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -8,6 +9,9 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.time.Duration;
 
 public abstract class BasePage {
@@ -15,6 +19,7 @@ public abstract class BasePage {
    protected WebDriver driver;
    public static JavascriptExecutor js;
    protected WebDriverWait wait;
+    public static SoftAssertions softly;
 
 
     public BasePage(WebDriver driver) {
@@ -22,6 +27,7 @@ public abstract class BasePage {
         PageFactory.initElements(driver,this);
         js =(JavascriptExecutor) driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        softly = new SoftAssertions();
     }
 
     public void scrollWithJS(int x,int y){
@@ -78,6 +84,28 @@ public abstract class BasePage {
     public boolean shouldHaveText(WebElement element,String text,int time){
         return getWait(time).until(ExpectedConditions.textToBePresentInElement(element,text));
 
+    }
+
+    public void verifyLinks(String url){
+
+        try {
+            URL linkUrl = new URL(url);
+            //create URL connection and get response code
+            HttpURLConnection connection = (HttpURLConnection) linkUrl.openConnection();
+            connection.setConnectTimeout(5000);
+            connection.connect();
+            int statusCode = connection.getResponseCode();
+            if (statusCode>=400){
+               // System.out.println(url + " --> " + connection.getResponseMessage() + "is a BROKEN link");
+                softly.fail(url + " --> " + connection.getResponseMessage() + "is a BROKEN link");
+            }else {
+                //System.out.println(url + " --> " + connection.getResponseMessage());
+                softly.assertThat(statusCode).isLessThan(400);
+            }
+        } catch (IOException e) {
+          //  System.out.println(url + "--> " + "ERROR occurred");
+            softly.fail(url + "--> " + "ERROR occurred");
+        }
     }
 }
 

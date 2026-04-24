@@ -5,6 +5,7 @@ import com.demoqa.pages.alertsFrameWindows.AlertsPage;
 import com.demoqa.pages.alertsFrameWindows.IframesPage;
 import com.demoqa.pages.alertsFrameWindows.WindowsPage;
 import com.demoqa.pages.bookStore.LoginPage;
+import com.demoqa.pages.elements.BrokenLinksImagesPages;
 import com.demoqa.pages.forms.PracticeFormPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -48,5 +49,11 @@ WebElement alerts;
     public PracticeFormPage getPracticeForm() {
         clickWithJS(practiceForm);
         return new PracticeFormPage(driver);
+    }
+    @FindBy(xpath = "//span[.='Broken Links - Images']")
+    WebElement brokenLinksImages;
+    public BrokenLinksImagesPages getBrokenLinksImages() {
+        clickWithJS(brokenLinksImages);
+        return new BrokenLinksImagesPages(driver);
     }
 }
